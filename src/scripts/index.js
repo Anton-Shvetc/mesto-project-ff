@@ -7,6 +7,8 @@
 */
 import "../index.css";
 
+import { enableValidation, clearValidation } from "./validation.js";
+
 // import { initialCards } from "./cards";
 import { createCardElement, handleLikeIcon, handleDeleteCard } from "./card";
 import {
@@ -42,7 +44,14 @@ const profileTitle = document.querySelector(".profile__title");
 const profileDescription = document.querySelector(".profile__description");
 
 
-
+const validationConfig = {
+  formSelector: ".popup__form",
+  inputSelector: ".popup__input",
+  submitButtonSelector: ".popup__button",
+  inactiveButtonClass: "popup__button_disabled",
+  inputErrorClass: "popup__input_type_error",
+  errorClass: "popup__error_visible",
+};
 
 const handlePreviewPicture = ({ name, link }) => {
   imageElement.src = link;
@@ -102,6 +111,8 @@ openProfileFormButton.addEventListener("click", () => {
 });
 
 openCardFormButton.addEventListener("click", () => {
+  cardForm.reset();
+  clearValidation(cardForm, validationConfig);
   openModalWindow(cardFormModalWindow);
 });
 
@@ -129,3 +140,10 @@ setCloseModalWindowEventListeners(profileFormModalWindow);
 setCloseModalWindowEventListeners(cardFormModalWindow);
 setCloseModalWindowEventListeners(imageModalWindow);
 
+
+
+
+
+
+
+enableValidation(validationConfig);

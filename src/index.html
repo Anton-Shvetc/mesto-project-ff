@@ -78,11 +78,16 @@
           <form class="popup__form" name="new-place" novalidate>
             <label class="popup__label">
               <input
+                id="place-name"
                 type="text"
                 name="name"
-                id="place-name"
                 class="popup__input popup__input_type_card-name"
                 placeholder="Название"
+                minlength="2"
+                maxlength="30"
+                pattern="^[a-zA-Zа-яА-ЯёË\- ]+$"
+                data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
+                required
               />
               <span class="popup__error" id="place-name-error"></span>
             </label>
@@ -94,6 +99,7 @@
                 class="popup__input popup__input_type_url"
                 placeholder="Ссылка на картинку"
               />
+
               <span class="popup__error" id="place-link-error"></span>
             </label>
             <button type="submit" class="button popup__button">
