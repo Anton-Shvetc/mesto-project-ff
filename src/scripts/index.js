@@ -9,7 +9,6 @@ import "../index.css";
 
 import { enableValidation, clearValidation } from "./validation.js";
 
-// import { initialCards } from "./cards";
 import { createCardElement, handleLikeIcon, handleDeleteCard } from "./card";
 import {
   closeModalWindow,
@@ -39,10 +38,17 @@ const imageCaption = imageModalWindow.querySelector(".popup__caption");
 
 const openProfileFormButton = document.querySelector(".profile__edit-button");
 const openCardFormButton = document.querySelector(".profile__add-button");
+const openAvatarFormButton = document.querySelector(".profile__image");
 
 const profileTitle = document.querySelector(".profile__title");
 const profileDescription = document.querySelector(".profile__description");
+const profileImage = openAvatarFormButton.querySelector(
+  ".profile__image-avatar"
+);
 
+const avatarFormModalWindow = document.querySelector(".popup_type_avatar");
+const avatarForm = avatarFormModalWindow.querySelector(".popup__form");
+const avatarLinkInput = avatarForm.querySelector(".popup__input_avatar");
 
 const validationConfig = {
   formSelector: ".popup__form",
@@ -100,15 +106,30 @@ const handleCardFormSubmit = async (evt) => {
   cardForm.reset();
 };
 
+const handleAvatarFormSubmit = async (evt) => {
+  evt.preventDefault();
+  const avatar = avatarLinkInput.value;
+
+  const request = await apiRequest(
+    "users/me/avatar",
+    "PATCH",
+    JSON.stringify({ avatar })
+  );
+
+  if (request) {
+    profileImage.src = request.avatar;
+    closeModalWindow(avatarFormModalWindow);
+  }
+};
+
 // EventListeners
 profileForm.addEventListener("submit", handleProfileFormSubmit);
 cardForm.addEventListener("submit", handleCardFormSubmit);
+avatarForm.addEventListener("submit", handleAvatarFormSubmit);
 
 openProfileFormButton.addEventListener("click", () => {
-
-
-    profileForm.reset();
-    clearValidation(profileForm, validationConfig);
+  profileForm.reset();
+  clearValidation(profileForm, validationConfig);
 
   profileTitleInput.value = profileTitle.textContent;
   profileDescriptionInput.value = profileDescription.textContent;
@@ -121,8 +142,15 @@ openCardFormButton.addEventListener("click", () => {
   openModalWindow(cardFormModalWindow);
 });
 
+openAvatarFormButton.addEventListener("click", () => {
+  avatarForm.reset();
+  clearValidation(avatarForm, validationConfig);
+
+  openModalWindow(avatarFormModalWindow);
+});
+
+
 const initialCards = async () => {
-  console.log("test")
   const request = await apiRequest("cards", "GET");
 
   if (request) {
@@ -138,12 +166,23 @@ const initialCards = async () => {
     });
   }
 };
+
+const userProfile = async () => {
+  const request = await apiRequest("users/me", "GET");
+  if (request) {
+    profileTitle.textContent = request.name;
+    profileDescription.textContent = request.about;
+    profileImage.src = request.avatar;
+  }
+};
+
 initialCards();
+userProfile();
 
 //настраиваем обработчики закрытия попапов
 setCloseModalWindowEventListeners(profileFormModalWindow);
 setCloseModalWindowEventListeners(cardFormModalWindow);
 setCloseModalWindowEventListeners(imageModalWindow);
+setCloseModalWindowEventListeners(avatarFormModalWindow);
 
-
-enableValidation(validationConfig); 
+enableValidation(validationConfig);

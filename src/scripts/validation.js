@@ -25,7 +25,6 @@ const isValid = (formElement, inputElement, validationConfig) => {
   } else {
     inputElement.setCustomValidity("");
   }
-  console.log("isValid", inputElement);
   if (!inputElement.validity.valid) {
     showInputError(
       formElement,
