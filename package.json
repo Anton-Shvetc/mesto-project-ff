@@ -11,7 +11,7 @@
     "type": "git",
     "url": "git+https://github.com:Practicum-Review-Team/frontend-developer-canonicals.git"
   },
-  "author": "Yandex.Praktikum",
+  "author": "Anton Shvetc",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com:Practicum-Review-Team/frontend-developer-canonicals/issues"
@@ -36,3 +36,4 @@
     "core-js": "^3.33.1"
   }
 }
+
