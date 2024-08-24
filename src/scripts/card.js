@@ -1,8 +1,12 @@
 export const handleLikeIcon = (evt) => {
+
+    console.log("add like");
   evt.target.classList.toggle("card__like-button_is-active");
 };
 
 export const handleDeleteCard = (evt) => {
+  console.log("delete")
+
   evt.target.closest(".card").remove();
 };
 
@@ -38,3 +42,4 @@ export const createCardElement = (
 
   return cardElement;
 };
+
