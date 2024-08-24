@@ -105,6 +105,11 @@ profileForm.addEventListener("submit", handleProfileFormSubmit);
 cardForm.addEventListener("submit", handleCardFormSubmit);
 
 openProfileFormButton.addEventListener("click", () => {
+
+
+    profileForm.reset();
+    clearValidation(profileForm, validationConfig);
+
   profileTitleInput.value = profileTitle.textContent;
   profileDescriptionInput.value = profileDescription.textContent;
   openModalWindow(profileFormModalWindow);
@@ -141,9 +146,4 @@ setCloseModalWindowEventListeners(cardFormModalWindow);
 setCloseModalWindowEventListeners(imageModalWindow);
 
 
-
-
-
-
-
-enableValidation(validationConfig);
+enableValidation(validationConfig); 
