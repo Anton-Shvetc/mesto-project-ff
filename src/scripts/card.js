@@ -1,13 +1,18 @@
-export const handleLikeIcon = (evt) => {
+import { apiRequest } from "./utils";
 
-    console.log("add like");
+export const handleLikeIcon = (evt) => {
+  console.log("add like");
   evt.target.classList.toggle("card__like-button_is-active");
 };
 
-export const handleDeleteCard = (evt) => {
-  console.log("delete")
+export const handleDeleteCard = async (evt) => {
+  const id = evt.target.closest(".card").getAttribute("id");
 
-  evt.target.closest(".card").remove();
+  const request = apiRequest(`cards/${id}`, "DELETE");
+
+  if (request) {
+    evt.target.closest(".card").remove();
+  }
 };
 
 const getTemplate = () => {
@@ -27,6 +32,8 @@ export const createCardElement = (
   const cardImage = cardElement.querySelector(".card__image");
   cardImage.style.backgroundImage = `url(${data.link})`;
   cardElement.querySelector(".card__title").textContent = data.name;
+  // Добавляем атрибут 'id' с уникальным значением
+  cardElement.setAttribute("id", data["_id"]);
 
   if (onLikeIcon) {
     likeButton.addEventListener("click", onLikeIcon);

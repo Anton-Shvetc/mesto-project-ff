@@ -15,6 +15,8 @@ import {
   setCloseModalWindowEventListeners,
 } from "./modal";
 
+import { apiRequest } from "./utils";
+
 // DOM узлы
 const placesWrap = document.querySelector(".places__list");
 const profileFormModalWindow = document.querySelector(".popup_type_edit");
@@ -39,32 +41,8 @@ const openCardFormButton = document.querySelector(".profile__add-button");
 const profileTitle = document.querySelector(".profile__title");
 const profileDescription = document.querySelector(".profile__description");
 
-const serverConfig = {
-  url: "https://nomoreparties.co/v1/cohort-magistr-2",
-  headers: {
-    authorization: "b354eeff-aa28-4966-b729-3b31a1f1a39b",
-    "Content-Type": "application/json",
-  },
-};
 
-// Шаблон функции запроса
-const apiRequest = async (url, method, body) => {
-  try {
-    const response = await fetch(`${serverConfig.url}/${url}`, {
-      method,
-      headers: serverConfig.headers,
-      body,
-    });
 
-    if (!response.ok) {
-      throw new Error(`Ошибка: ${response.status}`);
-    }
-
-    return await response.json();
-  } catch (error) {
-    return null;
-  }
-};
 
 const handlePreviewPicture = ({ name, link }) => {
   imageElement.src = link;
@@ -128,6 +106,7 @@ openCardFormButton.addEventListener("click", () => {
 });
 
 const initialCards = async () => {
+  console.log("test")
   const request = await apiRequest("cards", "GET");
 
   if (request) {
