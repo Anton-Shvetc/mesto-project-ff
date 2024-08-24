@@ -68,9 +68,20 @@ const handlePreviewPicture = ({ name, link }) => {
 
 const handleProfileFormSubmit = (evt) => {
   evt.preventDefault();
-  profileTitle.textContent = profileTitleInput.value;
-  profileDescription.textContent = profileDescriptionInput.value;
-  closeModalWindow(profileFormModalWindow);
+
+  const name = profileTitleInput.value;
+  const about = profileDescriptionInput.value;
+
+  const request = apiRequest(
+    "users/me",
+    "PATCH",
+    JSON.stringify({ name, about })
+  );
+  if (request) {
+    profileTitle.textContent = name;
+    profileDescription.textContent = about;
+    closeModalWindow(profileFormModalWindow);
+  }
 };
 
 const handleCardFormSubmit = async (evt) => {
@@ -149,7 +160,6 @@ openAvatarFormButton.addEventListener("click", () => {
   openModalWindow(avatarFormModalWindow);
 });
 
-
 const initialCards = async () => {
   const request = await apiRequest("cards", "GET");
 
@@ -186,3 +196,4 @@ setCloseModalWindowEventListeners(imageModalWindow);
 setCloseModalWindowEventListeners(avatarFormModalWindow);
 
 enableValidation(validationConfig);
+
