@@ -1,1 +1,1 @@
-# Каноническая работа 6 спринта («Mesto. Сборка, модульность и модальные окна»)
+https://github.com/Anton-Shvetc/mesto-project-ff

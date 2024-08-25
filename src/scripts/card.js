@@ -1,4 +1,4 @@
-import { apiRequest } from "./utils";
+import { apiRequest } from "./api";
 
 export const handleLikeIcon = async (evt) => {
   const cardLikeCount =

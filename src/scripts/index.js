@@ -16,7 +16,7 @@ import {
   setCloseModalWindowEventListeners,
 } from "./modal";
 
-import { apiRequest } from "./utils";
+import { apiRequest } from "./api.js";
 
 // DOM узлы
 const placesWrap = document.querySelector(".places__list");
