@@ -45,6 +45,7 @@ const profileDescription = document.querySelector(".profile__description");
 const profileImage = openAvatarFormButton.querySelector(
   ".profile__image-avatar"
 );
+let profileId = "";
 
 const avatarFormModalWindow = document.querySelector(".popup_type_avatar");
 const avatarForm = avatarFormModalWindow.querySelector(".popup__form");
@@ -163,11 +164,21 @@ openAvatarFormButton.addEventListener("click", () => {
 const initialCards = async () => {
   const request = await apiRequest("cards", "GET");
 
+  const userId = JSON.parse(localStorage.getItem("userId"));
+
   if (request) {
     // отображение карточек
     request.forEach((data) => {
+      let isLiked = false;
+
+      data.likes.forEach((like) => {
+        if (like._id === userId) {
+          isLiked = true;
+        }
+      });
+
       placesWrap.append(
-        createCardElement(data, {
+        createCardElement(data, isLiked, {
           onPreviewPicture: handlePreviewPicture,
           onLikeIcon: handleLikeIcon,
           onDeleteCard: handleDeleteCard,
@@ -183,11 +194,12 @@ const userProfile = async () => {
     profileTitle.textContent = request.name;
     profileDescription.textContent = request.about;
     profileImage.src = request.avatar;
+    localStorage.setItem("userId", JSON.stringify(request._id));
   }
 };
+userProfile();
 
 initialCards();
-userProfile();
 
 //настраиваем обработчики закрытия попапов
 setCloseModalWindowEventListeners(profileFormModalWindow);
