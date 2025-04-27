@@ -161,14 +161,9 @@ openAvatarFormButton.addEventListener("click", () => {
   openModalWindow(avatarFormModalWindow);
 });
 
-const initialCards = async () => {
-  const request = await apiRequest("cards", "GET");
-
-  const userId = JSON.parse(localStorage.getItem("userId"));
-
-  if (request) {
-    // отображение карточек
-    request.forEach((data) => {
+const initializationCards = (cardsData, userId) => {
+  if (cardsData) {
+    cardsData.forEach((data) => {
       let isLiked = false;
 
       data.likes.forEach((like) => {
@@ -188,18 +183,31 @@ const initialCards = async () => {
   }
 };
 
-const userProfile = async () => {
+const getUserProfile = async () => {
   const request = await apiRequest("users/me", "GET");
   if (request) {
     profileTitle.textContent = request.name;
     profileDescription.textContent = request.about;
     profileImage.src = request.avatar;
     localStorage.setItem("userId", JSON.stringify(request._id));
+    return request._id;
   }
+  return null;
 };
-userProfile();
 
-initialCards();
+const loadInitialData = () => {
+  Promise.all([getUserProfile(), getCards()])
+    .then(([userId, cardsData]) => {
+      if (userId) {
+        initializationCards(cardsData, userId);
+      }
+    })
+    .catch((error) => {
+      console.error("Ошибка при загрузке данных:", error);
+    });
+};
+
+loadInitialData();
 
 //настраиваем обработчики закрытия попапов
 setCloseModalWindowEventListeners(profileFormModalWindow);
@@ -208,4 +216,3 @@ setCloseModalWindowEventListeners(imageModalWindow);
 setCloseModalWindowEventListeners(avatarFormModalWindow);
 
 enableValidation(validationConfig);
-
