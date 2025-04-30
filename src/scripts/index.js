@@ -92,45 +92,56 @@ const handleCardFormSubmit = async (evt) => {
   const link = cardLinkInput.value;
 
   // Запрос на добавление новой карточки
-  const request = await apiRequest(
-    "cards",
-    "POST",
-    JSON.stringify({ name, link })
-  );
 
-  if (!request) return;
+  try {
+    const request = await apiRequest(
+      "cards",
+      "POST",
+      JSON.stringify({ name, link })
+    );
 
-  placesWrap.prepend(
-    createCardElement(
-      {
-        name: cardNameInput.value,
-        link: cardLinkInput.value,
-      },
-      {
-        onPreviewPicture: handlePreviewPicture,
-        onLikeIcon: handleLikeIcon,
-        onDeleteCard: handleDeleteCard,
-      }
-    )
-  );
+    if (!request) return;
 
-  closeModalWindow(cardFormModalWindow);
-  cardForm.reset();
+    placesWrap.prepend(
+      createCardElement(
+        {
+          name: cardNameInput.value,
+          link: cardLinkInput.value,
+        },
+        {
+          onPreviewPicture: handlePreviewPicture,
+          onLikeIcon: handleLikeIcon,
+          onDeleteCard: handleDeleteCard,
+        }
+      )
+    );
+
+    closeModalWindow(cardFormModalWindow);
+    cardForm.reset();
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 };
 
 const handleAvatarFormSubmit = async (evt) => {
   evt.preventDefault();
   const avatar = avatarLinkInput.value;
 
-  const request = await apiRequest(
-    "users/me/avatar",
-    "PATCH",
-    JSON.stringify({ avatar })
-  );
+  try {
+    const request = await apiRequest(
+      "users/me/avatar",
+      "PATCH",
+      JSON.stringify({ avatar })
+    );
 
-  if (request) {
-    profileImage.src = request.avatar;
-    closeModalWindow(avatarFormModalWindow);
+    if (request) {
+      profileImage.src = request.avatar;
+      closeModalWindow(avatarFormModalWindow);
+    }
+  } catch (error) {
+    console.error(error);
+    throw error;
   }
 };
 
@@ -184,15 +195,19 @@ const initializationCards = (cardsData, userId) => {
 };
 
 const getUserProfile = async () => {
-  const request = await apiRequest("users/me", "GET");
-  if (request) {
-    profileTitle.textContent = request.name;
-    profileDescription.textContent = request.about;
-    profileImage.src = request.avatar;
-    localStorage.setItem("userId", JSON.stringify(request._id));
-    return request._id;
+  try {
+    const request = await apiRequest("users/me", "GET");
+    if (request) {
+      profileTitle.textContent = request.name;
+      profileDescription.textContent = request.about;
+      profileImage.src = request.avatar;
+      localStorage.setItem("userId", JSON.stringify(request._id));
+      return request._id;
+    }
+  } catch (error) {
+    console.error(error);
+    return null;
   }
-  return null;
 };
 
 const loadInitialData = () => {

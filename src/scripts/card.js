@@ -10,10 +10,15 @@ export const handleLikeIcon = async (evt) => {
 
   let request;
 
-  if (isLiked) {
-    request = await apiRequest(`cards/likes/${id}`, "DELETE");
-  } else {
-    request = await apiRequest(`cards/likes/${id}`, "PUT");
+  try {
+    if (isLiked) {
+      request = await apiRequest(`cards/likes/${id}`, "DELETE");
+    } else {
+      request = await apiRequest(`cards/likes/${id}`, "PUT");
+    }
+  } catch (error) {
+    console.error(error);
+    throw error;
   }
 
   if (request) {
@@ -26,10 +31,15 @@ export const handleLikeIcon = async (evt) => {
 export const handleDeleteCard = async (evt) => {
   const id = evt.target.closest(".card").getAttribute("id");
 
-  const request = apiRequest(`cards/${id}`, "DELETE");
+  try {
+    const request = apiRequest(`cards/${id}`, "DELETE");
 
-  if (request) {
-    evt.target.closest(".card").remove();
+    if (request) {
+      evt.target.closest(".card").remove();
+    }
+  } catch (error) {
+    console.error(error);
+    throw error;
   }
 };
 
@@ -76,4 +86,3 @@ export const createCardElement = (
 
   return cardElement;
 };
-
